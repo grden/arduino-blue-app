@@ -18,14 +18,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          'My Health Monitor',
-          style: TextManager.main21,
-        ),
-        backgroundColor: ColorManager.background,
-      ),
+      appBar: _buildAppBar(),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         color: ColorManager.background,
@@ -57,6 +50,22 @@ class _MonitorScreenState extends State<MonitorScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      leading: Icon(
+        Icons.favorite,
+        color: ColorManager.white,
+      ),
+      centerTitle: false,
+      titleSpacing: 0,
+      title: Text(
+        'My Health Monitor',
+        style: TextManager.main21,
+      ),
+      backgroundColor: ColorManager.background,
     );
   }
 

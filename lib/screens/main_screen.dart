@@ -83,13 +83,13 @@ class _MainScreenState extends State<MainScreen>
           textStyle: TextManager.main19,
           tabs: [
             GButton(
-              icon: Icons.watch,
-              text: '연결된 기기',
+              icon: Icons.favorite,
+              text: '상태 모니터',
               borderRadius: BorderRadius.circular(16),
             ),
             GButton(
-              icon: Icons.bluetooth,
-              text: '블루투스',
+              icon: Icons.watch,
+              text: '기기 연결',
               borderRadius: BorderRadius.circular(16),
             )
           ]),

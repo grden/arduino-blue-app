@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import '../utils/theme/color_manager.dart';
+import '../utils/theme/text_manager.dart';
+import 'sizedbox.dart';
+
 class ScanResultTile extends StatefulWidget {
   const ScanResultTile({super.key, required this.result, this.onTap});
 
@@ -62,36 +66,80 @@ class _ScanResultTileState extends State<ScanResultTile> {
     return _connectionState == BluetoothConnectionState.connected;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    var adv = widget.result.advertisementData;
+    return ListTileTheme(
+      contentPadding: EdgeInsets.zero,
+      child: ExpansionTile(
+        title: _buildTitle(context),
+        leading: Text(
+          widget.result.rssi.toString(),
+          style: TextManager.main15,
+        ),
+        trailing: _buildConnectButton(context),
+        children: [
+          if (adv.advName.isNotEmpty)
+            _buildAdvRow(context, 'Name', adv.advName),
+          if (adv.txPowerLevel != null)
+            _buildAdvRow(context, 'Tx Power Level', '${adv.txPowerLevel}'),
+          if ((adv.appearance ?? 0) > 0)
+            _buildAdvRow(context, 'Appearance',
+                '0x${adv.appearance!.toRadixString(16)}'),
+          if (adv.msd.isNotEmpty)
+            _buildAdvRow(
+                context, 'Manufacturer Data', getNiceManufacturerData(adv.msd)),
+          if (adv.serviceUuids.isNotEmpty)
+            _buildAdvRow(context, 'Service UUIDs',
+                getNiceServiceUuids(adv.serviceUuids)),
+          if (adv.serviceData.isNotEmpty)
+            _buildAdvRow(
+                context, 'Service Data', getNiceServiceData(adv.serviceData)),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTitle(BuildContext context) {
     if (widget.result.device.platformName.isNotEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Text(
             widget.result.device.platformName,
             overflow: TextOverflow.ellipsis,
+            style: TextManager.main17,
           ),
           Text(
             widget.result.device.remoteId.str,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: TextManager.second15,
           )
         ],
       );
     } else {
-      return Text(widget.result.device.remoteId.str);
+      return Text(
+        widget.result.device.remoteId.str,
+        style: TextManager.second15,
+      );
     }
   }
 
   Widget _buildConnectButton(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+    return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: isConnected ? ColorManager.white : Colors.transparent,
+        side: BorderSide(color: ColorManager.white, width: 1),
+        padding: const EdgeInsets.all(8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
       onPressed:
           (widget.result.advertisementData.connectable) ? widget.onTap : null,
-      child: isConnected ? const Text('OPEN') : const Text('CONNECT'),
+      child: isConnected
+          ? Text('상세', style: TextManager.inverse17)
+          : Text('연결', style: TextManager.thick17),
     );
   }
 
@@ -100,50 +148,18 @@ class _ScanResultTileState extends State<ScanResultTile> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(title, style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(
-            width: 12.0,
-          ),
+        children: [
+          Text(title, style: TextManager.main13),
+          const Width(8),
           Expanded(
             child: Text(
               value,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.apply(color: Colors.black),
+              style: TextManager.second13,
               softWrap: true,
             ),
           ),
         ],
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var adv = widget.result.advertisementData;
-    return ExpansionTile(
-      title: _buildTitle(context),
-      leading: Text(widget.result.rssi.toString()),
-      trailing: _buildConnectButton(context),
-      children: <Widget>[
-        if (adv.advName.isNotEmpty) _buildAdvRow(context, 'Name', adv.advName),
-        if (adv.txPowerLevel != null)
-          _buildAdvRow(context, 'Tx Power Level', '${adv.txPowerLevel}'),
-        if ((adv.appearance ?? 0) > 0)
-          _buildAdvRow(
-              context, 'Appearance', '0x${adv.appearance!.toRadixString(16)}'),
-        if (adv.msd.isNotEmpty)
-          _buildAdvRow(
-              context, 'Manufacturer Data', getNiceManufacturerData(adv.msd)),
-        if (adv.serviceUuids.isNotEmpty)
-          _buildAdvRow(
-              context, 'Service UUIDs', getNiceServiceUuids(adv.serviceUuids)),
-        if (adv.serviceData.isNotEmpty)
-          _buildAdvRow(
-              context, 'Service Data', getNiceServiceData(adv.serviceData)),
-      ],
     );
   }
 }

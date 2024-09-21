@@ -53,6 +53,49 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldMessenger(
+      key: Snackbar.snackBarKeyB,
+      child: Scaffold(
+        backgroundColor: ColorManager.background,
+        appBar: _buildAppBar(),
+        body: RefreshIndicator(
+          color: ColorManager.background,
+          onRefresh: onRefresh,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView(
+              children: [
+                ..._buildSystemDeviceTiles(context),
+                ..._buildScanResultTiles(context),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: _buildScanButton(context),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      scrolledUnderElevation: 0,
+      backgroundColor: ColorManager.background,
+      leading: Icon(
+        Icons.watch,
+        color: ColorManager.white,
+      ),
+      centerTitle: false,
+      titleSpacing: 0,
+      title: Text(
+        '기기 연결',
+        style: TextManager.main21,
+      ),
+    );
+  }
+
   Future onScanPressed() async {
     try {
       _systemDevices = await FlutterBluePlus.systemDevices;
@@ -72,14 +115,14 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
     }
   }
 
-  // Future onStopPressed() async {
-  //   try {
-  //     FlutterBluePlus.stopScan();
-  //   } catch (e) {
-  //     Snackbar.show(ABC.b, prettyException("Stop Scan Error:", e),
-  //         success: false);
-  //   }
-  // }
+  Future onStopPressed() async {
+    try {
+      FlutterBluePlus.stopScan();
+    } catch (e) {
+      Snackbar.show(ABC.b, prettyException("Stop Scan Error:", e),
+          success: false);
+    }
+  }
 
   void onConnectPressed(BluetoothDevice device) {
     device.connectAndUpdateStream().catchError((e) {
@@ -94,7 +137,8 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
 
   Future onRefresh() {
     if (_isScanning == false) {
-      FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+      FlutterBluePlus.startScan(
+          withServices: [Guid("180C")], timeout: const Duration(seconds: 15));
     }
     if (mounted) {
       setState(() {});
@@ -102,18 +146,34 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
     return Future.delayed(const Duration(milliseconds: 500));
   }
 
-  // Widget buildScanButton(BuildContext context) {
-  //   if (FlutterBluePlus.isScanningNow) {
-  //     return FloatingActionButton(
-  //       onPressed: onStopPressed,
-  //       backgroundColor: Colors.red,
-  //       child: const Icon(Icons.stop),
-  //     );
-  //   } else {
-  //     return FloatingActionButton(
-  //         onPressed: onScanPressed, child: const Text("SCAN"));
-  //   }
-  // }
+  Widget _buildScanButton(BuildContext context) {
+    if (FlutterBluePlus.isScanningNow) {
+      return FloatingActionButton.extended(
+        onPressed: onStopPressed,
+        backgroundColor: ColorManager.button,
+        label: Text(
+          "스캔 중지",
+          style: TextManager.second19,
+        ),
+        icon: Icon(
+          Icons.stop,
+          color: ColorManager.white,
+        ),
+      );
+    } else {
+      return FloatingActionButton.extended(
+          onPressed: onScanPressed,
+          backgroundColor: ColorManager.button,
+          label: Text(
+            "스캔 시작",
+            style: TextManager.second19,
+          ),
+          icon: Icon(
+            Icons.play_arrow,
+            color: ColorManager.white,
+          ));
+    }
+  }
 
   List<Widget> _buildSystemDeviceTiles(BuildContext context) {
     return _systemDevices
@@ -141,32 +201,5 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
           ),
         )
         .toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      key: Snackbar.snackBarKeyB,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Text(
-            '기기 찾기',
-            style: TextManager.main21,
-          ),
-          backgroundColor: ColorManager.background,
-        ),
-        body: RefreshIndicator(
-          onRefresh: onRefresh,
-          child: ListView(
-            children: [
-              ..._buildSystemDeviceTiles(context),
-              ..._buildScanResultTiles(context),
-            ],
-          ),
-        ),
-        // floatingActionButton: buildScanButton(context),
-      ),
-    );
   }
 }

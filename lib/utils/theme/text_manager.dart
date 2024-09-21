@@ -21,30 +21,6 @@ class TextManager {
       fontSize: 21,
       color: ColorManager.white);
 
-  static TextStyle main17 = TextStyle(
-      fontFamily: 'Pretendard',
-      fontWeight: FontWeight.w400,
-      fontSize: 17,
-      color: ColorManager.white);
-
-  static TextStyle second17 = TextStyle(
-      fontFamily: 'Pretendard',
-      fontWeight: FontWeight.w400,
-      fontSize: 17,
-      color: ColorManager.grey);
-
-  static TextStyle inverse17 = TextStyle(
-      fontFamily: 'Pretendard',
-      fontWeight: FontWeight.w400,
-      fontSize: 17,
-      color: ColorManager.highlight);
-
-  static TextStyle error17 = TextStyle(
-      fontFamily: 'Pretendard',
-      fontWeight: FontWeight.w600,
-      fontSize: 17,
-      color: ColorManager.error);
-
   static TextStyle main19 = TextStyle(
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w600,
@@ -63,9 +39,69 @@ class TextManager {
       fontSize: 19,
       color: ColorManager.highlight);
 
+  static TextStyle main17 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w400,
+      fontSize: 17,
+      color: ColorManager.white);
+
+  static TextStyle thick17 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w400,
+      fontSize: 17,
+      color: ColorManager.white);
+
+  static TextStyle bold17 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w500,
+      fontSize: 17,
+      color: ColorManager.highlight);
+
+  static TextStyle second17 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w400,
+      fontSize: 17,
+      color: ColorManager.grey);
+
+  static TextStyle inverse17 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 17,
+      color: ColorManager.background);
+
+  static TextStyle error17 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w600,
+      fontSize: 17,
+      color: ColorManager.error);
+
   static TextStyle main15 = TextStyle(
       fontFamily: 'Pretendard',
       fontWeight: FontWeight.w300,
       fontSize: 15,
       color: ColorManager.white);
+
+  static TextStyle second15 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w300,
+      fontSize: 15,
+      color: ColorManager.grey);
+
+  static TextStyle bold15 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w500,
+      fontSize: 15,
+      color: ColorManager.highlight);
+
+  static TextStyle main13 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w300,
+      fontSize: 13,
+      color: ColorManager.white);
+
+  static TextStyle second13 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w300,
+      fontSize: 13,
+      color: ColorManager.grey);
 }

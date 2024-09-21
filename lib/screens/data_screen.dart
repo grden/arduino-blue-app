@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:ard_blue_app/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../utils/provider/ble_provider.dart';
 import '../utils/theme/color_manager.dart';
+import '../utils/theme/text_manager.dart';
 import '../widgets/service_tile.dart';
 import '../widgets/characteristic_tile.dart';
 import '../widgets/descriptor_tile.dart';
@@ -36,14 +38,7 @@ class _DataScreenState extends ConsumerState<DataScreen> {
   final Guid tempUUID = Guid('2A6E');
   final Guid bpmUUID = Guid('2A37');
 
-  // BluetoothCharacteristic? _gpsCharacteristic;
-  // BluetoothCharacteristic? _tempCharacteristic;
-  // BluetoothCharacteristic? _bpmCharacteristic;
-
   final Map<Guid, StreamSubscription<List<int>>> _subscriptions = {};
-  // StreamSubscription<List<int>>? _gpsSubscription;
-  // StreamSubscription<List<int>>? _tempSubscription;
-  // StreamSubscription<List<int>>? _bpmSubscription;
 
   late StreamSubscription<BluetoothConnectionState>
       _connectionStateSubscription;
@@ -93,22 +88,78 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     });
   }
 
-  // 소멸자
   @override
   void dispose() {
     _connectionStateSubscription.cancel();
     _mtuSubscription.cancel();
     _isConnectingSubscription.cancel();
     _isDisconnectingSubscription.cancel();
-    // _gpsSubscription?.cancel();
-    // _tempSubscription?.cancel();
-    // _bpmSubscription?.cancel();
     _subscriptions.forEach((uuid, subscription) => subscription.cancel());
     super.dispose();
   }
 
   bool get isConnected {
     return _connectionState == BluetoothConnectionState.connected;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldMessenger(
+      key: Snackbar.snackBarKeyC,
+      child: Scaffold(
+        backgroundColor: ColorManager.background,
+        appBar: AppBar(
+          foregroundColor: ColorManager.white,
+          backgroundColor: ColorManager.background,
+          scrolledUnderElevation: 0,
+          centerTitle: false,
+          titleSpacing: 0,
+          title: Text(
+            widget.device.platformName,
+            style: TextManager.main21,
+          ),
+          actions: [_buildConnectButton(context)],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildRemoteId(context),
+                const Height(16),
+                Divider(
+                  color: ColorManager.grey,
+                  height: 1,
+                  thickness: 0.2,
+                ),
+                const Height(8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _buildRssiTile(context),
+                    const Width(8),
+                    Text(
+                      'Device is ${_connectionState.toString().split('.')[1]}.',
+                      style: TextManager.main17,
+                    ),
+                    const Width(8),
+                    _buildGetServices(context)
+                  ],
+                ),
+                const Height(8),
+                Divider(
+                  color: ColorManager.grey,
+                  height: 1,
+                  thickness: 0.2,
+                ),
+                ..._buildServiceTiles(context, widget.device),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Future onConnectPressed() async {
@@ -145,7 +196,7 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     }
   }
 
-  // Service 180C 및 notify하는 characteristic 찾고 subscribe & 변수 저장
+  // Service 180C & notify하는 characteristic 찾고 subscribe & 변수 저장
   void findServiceAndCharacteristics() async {
     if (mounted) {
       setState(() {
@@ -191,11 +242,17 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       sendToFirestore(receivedString, cName);
 
       if (c.uuid == gpsUUID) {
-        ref.read(gpsProvider.notifier).setBLE(value);
+        if (mounted) {
+          ref.read(gpsProvider.notifier).setBLE(value);
+        }
       } else if (c.uuid == tempUUID) {
-        ref.read(tempProvider.notifier).setBLE(value);
+        if (mounted) {
+          ref.read(tempProvider.notifier).setBLE(value);
+        }
       } else if (c.uuid == bpmUUID) {
-        ref.read(bpmProvider.notifier).setBLE(value);
+        if (mounted) {
+          ref.read(bpmProvider.notifier).setBLE(value);
+        }
       }
     });
 
@@ -240,15 +297,15 @@ class _DataScreenState extends ConsumerState<DataScreen> {
   //   }
   // }
 
-  Future onRequestMtuPressed() async {
-    try {
-      await widget.device.requestMtu(223, predelay: 0);
-      Snackbar.show(ABC.c, "Request Mtu: Success", success: true);
-    } catch (e) {
-      Snackbar.show(ABC.c, prettyException("Change Mtu Error:", e),
-          success: false);
-    }
-  }
+  // Future onRequestMtuPressed() async {
+  //   try {
+  //     await widget.device.requestMtu(223, predelay: 0);
+  //     Snackbar.show(ABC.c, "Request Mtu: Success", success: true);
+  //   } catch (e) {
+  //     Snackbar.show(ABC.c, prettyException("Change Mtu Error:", e),
+  //         success: false);
+  //   }
+  // }
 
   List<Widget> _buildServiceTiles(BuildContext context, BluetoothDevice d) {
     return _services
@@ -271,45 +328,51 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     );
   }
 
-  Widget buildSpinner(BuildContext context) {
+  Widget _buildSpinner(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.all(16.0),
       child: AspectRatio(
         aspectRatio: 1.0,
         child: CircularProgressIndicator(
-          color: ColorManager.highlight,
+          color: ColorManager.white,
+          strokeWidth: 2.0,
         ),
       ),
     );
   }
 
-  Widget buildRemoteId(BuildContext context) {
+  Widget _buildRemoteId(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text('${widget.device.remoteId}'),
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Text(
+        '${widget.device.remoteId}',
+        style: TextManager.main15,
+      ),
     );
   }
 
-  Widget buildRssiTile(BuildContext context) {
+  Widget _buildRssiTile(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         isConnected
-            ? const Icon(Icons.bluetooth_connected)
-            : const Icon(Icons.bluetooth_disabled),
-        Text(((isConnected && _rssi != null) ? '${_rssi!} dBm' : ''),
-            style: Theme.of(context).textTheme.bodySmall)
+            ? Icon(Icons.bluetooth_connected, color: ColorManager.white)
+            : Icon(Icons.bluetooth_disabled, color: ColorManager.white),
+        Text(((isConnected && _rssi != null) ? '${_rssi!} dBm' : '0'),
+            style: TextManager.main13)
       ],
     );
   }
 
-  Widget buildGetServices(BuildContext context) {
+  Widget _buildGetServices(BuildContext context) {
     return IndexedStack(
       index: (_isDiscoveringServices) ? 1 : 0,
       children: [
         TextButton(
           onPressed: findServiceAndCharacteristics,
-          child: const Text("Get Services"),
+          child: Text(
+            "Get Services",
+            style: TextManager.bold17,
+          ),
         ),
         IconButton(
           icon: SizedBox(
@@ -325,58 +388,36 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     );
   }
 
-  Widget buildMtuTile(BuildContext context) {
-    return ListTile(
-        title: const Text('MTU Size'),
-        subtitle: Text('$_mtuSize bytes'),
-        trailing: IconButton(
-          icon: const Icon(Icons.edit),
-          onPressed: onRequestMtuPressed,
-        ));
-  }
+  // Widget buildMtuTile(BuildContext context) {
+  //   return ListTile(
+  //       title: const Text('MTU Size'),
+  //       subtitle: Text('$_mtuSize bytes'),
+  //       trailing: IconButton(
+  //         icon: const Icon(Icons.edit),
+  //         onPressed: onRequestMtuPressed,
+  //       ));
+  // }
 
-  Widget buildConnectButton(BuildContext context) {
-    return Row(children: [
-      if (_isConnecting || _isDisconnecting) buildSpinner(context),
-      TextButton(
+  Widget _buildConnectButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: Row(children: [
+        if (_isConnecting || _isDisconnecting) _buildSpinner(context),
+        TextButton(
           onPressed: _isConnecting
               ? onCancelPressed
               : (isConnected ? onDisconnectPressed : onConnectPressed),
-          child: Text(
-            _isConnecting ? "CANCEL" : (isConnected ? "DISCONNECT" : "CONNECT"),
-            style: Theme.of(context)
-                .primaryTextTheme
-                .labelLarge
-                ?.copyWith(color: ColorManager.white),
-          ))
-    ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      key: Snackbar.snackBarKeyC,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.device.platformName),
-          actions: [buildConnectButton(context)],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              buildRemoteId(context),
-              ListTile(
-                leading: buildRssiTile(context),
-                title: Text(
-                    'Device is ${_connectionState.toString().split('.')[1]}.'),
-                trailing: buildGetServices(context),
-              ),
-              buildMtuTile(context),
-              ..._buildServiceTiles(context, widget.device),
-            ],
+          style: TextButton.styleFrom(
+            side: BorderSide(color: ColorManager.white, width: 1),
+            padding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
-        ),
-      ),
+          child: Text(_isConnecting ? "취소" : (isConnected ? "연결 해제" : "연결"),
+              style: TextManager.thick17),
+        )
+      ]),
     );
   }
 }

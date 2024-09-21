@@ -7,6 +7,7 @@ class ColorManager {
   static Color button = HexColor.fromHex("#32423E");
   static Color highlight = HexColor.fromHex("#a2b8b1");
   static Color error = HexColor.fromHex("#FF0A0A");
+  static Color success = HexColor.fromHex("#e5fde9");
 }
 
 extension HexColor on Color {

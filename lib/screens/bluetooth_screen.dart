@@ -51,9 +51,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 }
 
-//
 // This observer listens for Bluetooth Off and dismisses the DeviceScreen
-//
+
 class BluetoothAdapterStateObserver extends NavigatorObserver {
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
 

@@ -5,10 +5,10 @@ import '../theme/color_manager.dart';
 import 'package:flutter/material.dart';
 
 enum TabItem {
-  devices(Icons.watch, '기기', MonitorScreen(),
-      inActiveIcon: Icons.watch_outlined),
-  bluetooth(Icons.bluetooth_audio, '연결', BluetoothScreen(),
-      inActiveIcon: Icons.bluetooth);
+  devices(Icons.favorite, '기기', MonitorScreen(),
+      inActiveIcon: Icons.favorite_border_outlined),
+  bluetooth(Icons.watch, '연결', BluetoothScreen(),
+      inActiveIcon: Icons.watch_outlined);
 
   final IconData activeIcon;
   final IconData inActiveIcon;

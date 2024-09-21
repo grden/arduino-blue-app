@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:ard_blue_app/widgets/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 import "../utils/snackbar.dart";
 
 import '../utils/theme/color_manager.dart';
+import '../utils/theme/text_manager.dart';
 import "descriptor_tile.dart";
 
 class CharacteristicTile extends StatefulWidget {
@@ -55,6 +57,35 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
     ];
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return ListTileTheme(
+      contentPadding: EdgeInsets.zero,
+      child: ExpansionTile(
+        iconColor: ColorManager.white,
+        title: ListTile(
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Characteristic', style: TextManager.second17),
+              Row(
+                children: [
+                  _buildUuid(context),
+                  const Width(8),
+                  _buildValue(context),
+                ],
+              ),
+            ],
+          ),
+          subtitle: _buildButtonRow(context),
+          contentPadding: const EdgeInsets.all(0.0),
+        ),
+        children: widget.descriptorTiles,
+      ),
+    );
+  }
+
   Future onReadPressed() async {
     try {
       await c.read();
@@ -94,19 +125,22 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
     }
   }
 
-  Widget buildUuid(BuildContext context) {
+  Widget _buildUuid(BuildContext context) {
     String uuid = '0x${widget.characteristic.uuid.str.toUpperCase()}';
-    return Text(uuid, style: const TextStyle(fontSize: 13));
+    return Flexible(
+      child: Text(uuid,
+          style: TextManager.second15, overflow: TextOverflow.ellipsis),
+    );
   }
 
-  Widget buildValue(BuildContext context) {
+  Widget _buildValue(BuildContext context) {
     String data = _value.toString();
-    return Text(data, style: TextStyle(fontSize: 13, color: ColorManager.grey));
+    return Text(data, style: TextManager.second15);
   }
 
-  Widget buildReadButton(BuildContext context) {
+  Widget _buildReadButton(BuildContext context) {
     return TextButton(
-        child: const Text("Read"),
+        child: Text("Read", style: TextManager.bold15),
         onPressed: () async {
           await onReadPressed();
           if (mounted) {
@@ -115,10 +149,11 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
         });
   }
 
-  Widget buildWriteButton(BuildContext context) {
+  Widget _buildWriteButton(BuildContext context) {
     bool withoutResp = widget.characteristic.properties.writeWithoutResponse;
     return TextButton(
-        child: Text(withoutResp ? "WriteNoResp" : "Write"),
+        child: Text(withoutResp ? "WriteNoResp" : "Write",
+            style: TextManager.bold15),
         onPressed: () async {
           await onWritePressed();
           if (mounted) {
@@ -127,10 +162,11 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
         });
   }
 
-  Widget buildSubscribeButton(BuildContext context) {
+  Widget _buildSubscribeButton(BuildContext context) {
     bool isNotifying = widget.characteristic.isNotifying;
     return TextButton(
-        child: Text(isNotifying ? "Unsubscribe" : "Subscribe"),
+        child: Text(isNotifying ? "Unsubscribe" : "Subscribe",
+            style: TextManager.bold15),
         onPressed: () async {
           await onSubscribePressed();
           if (mounted) {
@@ -139,38 +175,19 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
         });
   }
 
-  Widget buildButtonRow(BuildContext context) {
+  Widget _buildButtonRow(BuildContext context) {
     bool read = widget.characteristic.properties.read;
     bool write = widget.characteristic.properties.write;
     bool notify = widget.characteristic.properties.notify;
     bool indicate = widget.characteristic.properties.indicate;
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (read) buildReadButton(context),
-        if (write) buildWriteButton(context),
-        if (notify || indicate) buildSubscribeButton(context),
+        if (read) _buildReadButton(context),
+        if (write) _buildWriteButton(context),
+        if (notify || indicate) _buildSubscribeButton(context),
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionTile(
-      title: ListTile(
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Characteristic'),
-            buildUuid(context),
-            buildValue(context),
-          ],
-        ),
-        subtitle: buildButtonRow(context),
-        contentPadding: const EdgeInsets.all(0.0),
-      ),
-      children: widget.descriptorTiles,
     );
   }
 }
