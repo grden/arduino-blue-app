@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "710654200487",
+    "project_id": "ard-blue-project",
+    "storage_bucket": "ard-blue-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710654200487:android:42d186ba7c01ca39f6e982",
+        "android_client_info": {
+          "package_name": "com.example.ard_blue_web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo7F1Iz9SbfuFAhjXDiRLhPJGHhoOOhos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710654200487:android:022218ebba985882f6e982",
+        "android_client_info": {
+          "package_name": "jeongwon.dev.ardBlueApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo7F1Iz9SbfuFAhjXDiRLhPJGHhoOOhos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
