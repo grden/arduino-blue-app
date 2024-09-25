@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:ard_blue_app/widgets/sizedbox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../utils/constants.dart';
 import '../utils/provider/ble_provider.dart';
 import '../utils/theme/color_manager.dart';
 import '../utils/theme/text_manager.dart';
@@ -202,6 +204,8 @@ class _DataScreenState extends ConsumerState<DataScreen> {
           success: false);
     }
 
+    setDocument();
+
     for (BluetoothService s in _services) {
       for (BluetoothCharacteristic c in s.characteristics) {
         // discover characteristics that notify, then specific characteristics
@@ -224,10 +228,22 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     }
   }
 
+  Future<void> setDocument() async {
+    db
+        .collection('soldiers')
+        .doc(widget.device.remoteId.str)
+        .set({'name': widget.device.advName}, SetOptions(merge: true)).then(
+            (value) {},
+            onError: (e) => Snackbar.show(
+                ABC.c, prettyException("Add Document Error:", e),
+                success: false));
+  }
+
   void listenToCharacteristic(BluetoothCharacteristic c, String cName) async {
     _subscriptions[c.uuid] = c.lastValueStream.listen((value) {
       String receivedString = String.fromCharCodes(value);
       print('Received from $cName: $receivedString');
+
       sendToFirestore(receivedString, cName);
 
       if (c.uuid == gpsUUID) {
@@ -263,30 +279,25 @@ class _DataScreenState extends ConsumerState<DataScreen> {
   }
 
   Future<void> sendToFirestore(String received, String cName) async {
-    // implement later
-    // print(widget.device.platformName);
-    // final deviceName = widget.device.platformName;
+    if (cName == 'gps') {
+      List<String> gpsData = received.split(', ');
+      db
+          .collection('soldiers')
+          .doc(widget.device.remoteId.str)
+          .update({'lat': gpsData[0], 'lng': gpsData[1]}).then((value) {},
+              onError: (e) => Snackbar.show(
+                  ABC.c, prettyException("Update Document for gps Error:", e),
+                  success: false));
+    } else {
+      db
+          .collection('soldiers')
+          .doc(widget.device.remoteId.str)
+          .update({cName: received}).then((value) {},
+              onError: (e) => Snackbar.show(
+                  ABC.c, prettyException("Add Document for $cName Error:", e),
+                  success: false));
+    }
   }
-
-  // Future onDiscoverServicesPressed() async {
-  //   if (mounted) {
-  //     setState(() {
-  //       _isDiscoveringServices = true;
-  //     });
-  //   }
-  //   try {
-  //     _services = await widget.device.discoverServices();
-  //     Snackbar.show(ABC.c, "Discover Services: Success", success: true);
-  //   } catch (e) {
-  //     Snackbar.show(ABC.c, prettyException("Discover Services Error:", e),
-  //         success: false);
-  //   }
-  //   if (mounted) {
-  //     setState(() {
-  //       _isDiscoveringServices = false;
-  //     });
-  //   }
-  // }
 
   List<Widget> _buildServiceTiles(BuildContext context, BluetoothDevice d) {
     return _services
@@ -368,16 +379,6 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       ],
     );
   }
-
-  // Widget buildMtuTile(BuildContext context) {
-  //   return ListTile(
-  //       title: const Text('MTU Size'),
-  //       subtitle: Text('$_mtuSize bytes'),
-  //       trailing: IconButton(
-  //         icon: const Icon(Icons.edit),
-  //         onPressed: onRequestMtuPressed,
-  //       ));
-  // }
 
   Widget _buildConnectButton(BuildContext context) {
     return Padding(
