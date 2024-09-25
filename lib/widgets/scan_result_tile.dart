@@ -73,10 +73,11 @@ class _ScanResultTileState extends State<ScanResultTile> {
       contentPadding: EdgeInsets.zero,
       child: ExpansionTile(
         title: _buildTitle(context),
-        leading: Text(
-          widget.result.rssi.toString(),
-          style: TextManager.main15,
-        ),
+        leading: Icon(Icons.devices, color: ColorManager.grey),
+        // Text(
+        //   widget.result.rssi.toString(),
+        //   style: TextManager.main15,
+        // ),
         trailing: _buildConnectButton(context),
         children: [
           if (adv.advName.isNotEmpty)

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../utils/theme/color_manager.dart';
@@ -28,6 +27,9 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     super.initState();
+
+    tabs = [TabItem.devices, TabItem.bluetooth];
+
     initNavigatorKeys();
   }
 
@@ -61,7 +63,7 @@ class _MainScreenState extends State<MainScreen>
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
       decoration: BoxDecoration(
         color: ColorManager.background,
         border: Border(
@@ -71,28 +73,48 @@ class _MainScreenState extends State<MainScreen>
           ),
         ),
       ),
-      child: GNav(
-          padding: const EdgeInsets.all(12),
-          gap: 8,
-          onTabChange: _handleOnTapNavigationBarItem,
-          color: ColorManager.grey,
-          activeColor: ColorManager.white,
+      child: Theme(
+        data: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: BottomNavigationBar(
           backgroundColor: ColorManager.background,
-          tabBackgroundColor: ColorManager.button,
-          iconSize: 24,
-          textStyle: TextManager.main19,
-          tabs: [
-            GButton(
-              icon: Icons.favorite,
-              text: '상태 모니터',
-              borderRadius: BorderRadius.circular(16),
-            ),
-            GButton(
-              icon: Icons.watch,
-              text: '기기 연결',
-              borderRadius: BorderRadius.circular(16),
-            )
-          ]),
+          items: navigationBarItems(context),
+          currentIndex: _currentIndex,
+          selectedItemColor: ColorManager.white,
+          unselectedItemColor: ColorManager.grey,
+          selectedLabelStyle: TextManager.main13,
+          unselectedLabelStyle: TextManager.second13,
+          onTap: _handleOnTapNavigationBarItem,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          iconSize: 28,
+          type: BottomNavigationBarType.fixed,
+        ),
+      ),
+      // GNav(
+      //     padding: const EdgeInsets.all(12),
+      //     gap: 8,
+      //     onTabChange: _handleOnTapNavigationBarItem,
+      //     color: ColorManager.grey,
+      //     activeColor: ColorManager.white,
+      //     backgroundColor: ColorManager.background,
+      //     tabBackgroundColor: ColorManager.button,
+      //     iconSize: 24,
+      //     textStyle: TextManager.main19,
+      //     tabs: [
+      //       GButton(
+      //         icon: Icons.favorite,
+      //         text: '상태 모니터',
+      //         borderRadius: BorderRadius.circular(16),
+      //       ),
+      //       GButton(
+      //         icon: Icons.watch,
+      //         text: '기기 연결',
+      //         borderRadius: BorderRadius.circular(16),
+      //       )
+      //     ]),
     );
   }
 

@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import '../utils/theme/color_manager.dart';
+import '../utils/theme/text_manager.dart';
+
 class SystemDeviceTile extends StatefulWidget {
   final BluetoothDevice device;
   final VoidCallback onOpen;
@@ -51,12 +54,29 @@ class _SystemDeviceTileState extends State<SystemDeviceTile> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(widget.device.platformName),
-      subtitle: Text(widget.device.remoteId.str),
-      trailing: ElevatedButton(
-        onPressed: isConnected ? widget.onOpen : widget.onConnect,
-        child: isConnected ? const Text('OPEN') : const Text('CONNECT'),
+    return ListTileTheme(
+      contentPadding: EdgeInsets.zero,
+      child: ListTile(
+        title: Text(widget.device.platformName, style: TextManager.main17),
+        subtitle: Text(
+          widget.device.remoteId.str,
+          style: TextManager.second15,
+        ),
+        trailing: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor:
+                isConnected ? ColorManager.white : Colors.transparent,
+            side: BorderSide(color: ColorManager.white, width: 1),
+            padding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onPressed: isConnected ? widget.onOpen : widget.onConnect,
+          child: isConnected
+              ? Text('상세', style: TextManager.inverse17)
+              : Text('연결', style: TextManager.thick17),
+        ),
       ),
     );
   }

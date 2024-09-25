@@ -25,10 +25,10 @@ class Snackbar {
   static show(ABC abc, String msg, {required bool success}) {
     final snackBar = success
         ? SnackBar(
-            content: Text(msg, style: TextManager.second17),
+            content: Text(msg, style: TextManager.inverse17),
             backgroundColor: ColorManager.success)
         : SnackBar(
-            content: Text(msg, style: TextManager.main17),
+            content: Text(msg, style: TextManager.thick17),
             backgroundColor: ColorManager.error);
     getSnackbar(abc).currentState?.removeCurrentSnackBar();
     getSnackbar(abc).currentState?.showSnackBar(snackBar);

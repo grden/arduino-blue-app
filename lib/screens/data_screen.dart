@@ -25,7 +25,6 @@ class DataScreen extends ConsumerStatefulWidget {
 
 class _DataScreenState extends ConsumerState<DataScreen> {
   int? _rssi;
-  int? _mtuSize;
   BluetoothConnectionState _connectionState =
       BluetoothConnectionState.disconnected;
   List<BluetoothService> _services = [];
@@ -44,9 +43,7 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       _connectionStateSubscription;
   late StreamSubscription<bool> _isConnectingSubscription;
   late StreamSubscription<bool> _isDisconnectingSubscription;
-  late StreamSubscription<int> _mtuSubscription;
 
-  // 생성자
   @override
   void initState() {
     super.initState();
@@ -60,13 +57,6 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       if (state == BluetoothConnectionState.connected && _rssi == null) {
         _rssi = await widget.device.readRssi();
       }
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    _mtuSubscription = widget.device.mtu.listen((value) {
-      _mtuSize = value;
       if (mounted) {
         setState(() {});
       }
@@ -91,7 +81,6 @@ class _DataScreenState extends ConsumerState<DataScreen> {
   @override
   void dispose() {
     _connectionStateSubscription.cancel();
-    _mtuSubscription.cancel();
     _isConnectingSubscription.cancel();
     _isDisconnectingSubscription.cancel();
     _subscriptions.forEach((uuid, subscription) => subscription.cancel());
@@ -275,6 +264,8 @@ class _DataScreenState extends ConsumerState<DataScreen> {
 
   Future<void> sendToFirestore(String received, String cName) async {
     // implement later
+    // print(widget.device.platformName);
+    // final deviceName = widget.device.platformName;
   }
 
   // Future onDiscoverServicesPressed() async {
@@ -294,16 +285,6 @@ class _DataScreenState extends ConsumerState<DataScreen> {
   //     setState(() {
   //       _isDiscoveringServices = false;
   //     });
-  //   }
-  // }
-
-  // Future onRequestMtuPressed() async {
-  //   try {
-  //     await widget.device.requestMtu(223, predelay: 0);
-  //     Snackbar.show(ABC.c, "Request Mtu: Success", success: true);
-  //   } catch (e) {
-  //     Snackbar.show(ABC.c, prettyException("Change Mtu Error:", e),
-  //         success: false);
   //   }
   // }
 

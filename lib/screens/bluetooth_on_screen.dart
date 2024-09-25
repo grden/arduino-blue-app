@@ -63,15 +63,25 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
         body: RefreshIndicator(
           color: ColorManager.background,
           onRefresh: onRefresh,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView(
-              children: [
-                ..._buildSystemDeviceTiles(context),
-                ..._buildScanResultTiles(context),
-              ],
-            ),
-          ),
+          child: _isScanning == false
+              ? Center(
+                  child:
+                      Text('스캔하여 연결 가능한 시계를 확인하세요', style: TextManager.main17))
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListView(
+                    children: [
+                      ..._buildSystemDeviceTiles(context),
+                      if (_systemDevices.isNotEmpty)
+                        Divider(
+                          color: ColorManager.grey,
+                          height: 1,
+                          thickness: 0.2,
+                        ),
+                      ..._buildScanResultTiles(context),
+                    ],
+                  ),
+                ),
         ),
         floatingActionButton: _buildScanButton(context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -157,7 +167,7 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
         ),
         icon: Icon(
           Icons.stop,
-          color: ColorManager.white,
+          color: ColorManager.grey,
         ),
       );
     } else {
@@ -166,7 +176,7 @@ class _BluetoothOnScreenState extends State<BluetoothOnScreen> {
           backgroundColor: ColorManager.button,
           label: Text(
             "스캔 시작",
-            style: TextManager.second19,
+            style: TextManager.main19,
           ),
           icon: Icon(
             Icons.play_arrow,

@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,39 +17,40 @@ class _MonitorScreenState extends State<MonitorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        color: ColorManager.background,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Height(16),
-              _buildBPMTile(),
-              const Height(16),
-              Divider(
-                color: ColorManager.grey,
-                height: 1,
-                thickness: 0.2,
-              ),
-              const Height(16),
-              _buildTempTile(),
-              const Height(16),
-              Divider(
-                color: ColorManager.grey,
-                height: 1,
-                thickness: 0.2,
-              ),
-              const Height(16),
-              _buildGPSTile(),
-              const Height(24),
-            ],
+        appBar: _buildAppBar(),
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          color: ColorManager.background,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Height(16),
+                _buildHelpTile(),
+                const Height(16),
+                _buildBPMTile(),
+                const Height(16),
+                Divider(
+                  color: ColorManager.grey,
+                  height: 1,
+                  thickness: 0.2,
+                ),
+                const Height(16),
+                _buildTempTile(),
+                const Height(16),
+                Divider(
+                  color: ColorManager.grey,
+                  height: 1,
+                  thickness: 0.2,
+                ),
+                const Height(16),
+                _buildGPSTile(),
+                const Height(24),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   AppBar _buildAppBar() {
@@ -76,8 +76,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
         children: [
           Text('체온', style: TextManager.second19),
           const Width(86),
-          Text('38',
-              // '${dataToString(tempData)} °C',
+          Text(
+              // '38',
+              '${dataToString(tempData)} °C',
               style: TextManager.inverse19),
           const Width(12),
           // if (double.parse(dataToString(tempData)) > 37)
@@ -103,44 +104,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
               style: TextManager.second19,
             ),
             Text(
-              '72 bpm',
-              // dataToString(bpmData),
+              // '72 bpm',
+              '${dataToString(bpmData)} bpm',
               style: TextManager.main29,
             ),
-            // SizedBox(
-            //   height: 150,
-            //   child: LineChart(
-            //     LineChartData(
-            //       lineBarsData: [
-            //         LineChartBarData(
-            //           spots: _heartRateData,
-            //           isCurved: true,
-            //           color: ColorManager.highlight,
-            //           barWidth: 4,
-            //           dotData: const FlDotData(show: false),
-            //           belowBarData: BarAreaData(
-            //             show: true,
-            //             gradient: LinearGradient(
-            //               colors: [
-            //                 ColorManager.highlight.withOpacity(0.1),
-            //                 ColorManager.highlight.withOpacity(0.0),
-            //               ],
-            //               begin: Alignment.topCenter,
-            //               end: Alignment.bottomCenter,
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //       titlesData: const FlTitlesData(show: false),
-            //       borderData: FlBorderData(show: false),
-            //       gridData: const FlGridData(show: false),
-            //       minX: 0,
-            //       maxX: 59,
-            //       minY: 0,
-            //       maxY: 200, // Assuming max heart rate of 200 bpm
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       );
@@ -156,8 +123,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
             children: [
               Text('위도, 경도', style: TextManager.second19),
               const Width(48),
-              Text('37.5, 120.5',
-                  // dataToString(gpsData),
+              Text(
+                  // '37.5, 120.5',
+                  dataToString(gpsData),
                   style: TextManager.inverse19),
             ],
           ),
@@ -165,9 +133,28 @@ class _MonitorScreenState extends State<MonitorScreen> {
       );
     });
   }
-}
 
-String dataToString(List<int> data) {
-  final result = String.fromCharCodes(data);
-  return result;
+  Widget _buildHelpTile() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: ColorManager.highlight,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Center(
+          child: Text('데이터는 5초에 한번씩 업데이트됩니다', style: TextManager.main17)),
+    );
+  }
+
+  String dataToString(List<int> data) {
+    String result = '';
+
+    if (data.isEmpty) {
+      result = '-';
+    } else {
+      result = String.fromCharCodes(data);
+    }
+    return result;
+  }
 }
