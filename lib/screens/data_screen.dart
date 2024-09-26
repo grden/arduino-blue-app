@@ -279,15 +279,26 @@ class _DataScreenState extends ConsumerState<DataScreen> {
   }
 
   Future<void> sendToFirestore(String received, String cName) async {
+    if (received.isEmpty) {
+      return;
+    }
     if (cName == 'gps') {
       List<String> gpsData = received.split(', ');
-      db
-          .collection('soldiers')
-          .doc(widget.device.remoteId.str)
-          .update({'lat': gpsData[0], 'lng': gpsData[1]}).then((value) {},
-              onError: (e) => Snackbar.show(
-                  ABC.c, prettyException("Update Document for gps Error:", e),
-                  success: false));
+      if (gpsData.length >= 2) {
+        db
+            .collection('soldiers')
+            .doc(widget.device.remoteId.str)
+            .update({'lat': gpsData[0], 'lng': gpsData[1]}).then((value) {},
+                onError: (e) => Snackbar.show(
+                    ABC.c, prettyException("Update Document for gps Error:", e),
+                    success: false));
+      } else {
+        // print('catch');
+        db
+            .collection('soldiers')
+            .doc(widget.device.remoteId.str)
+            .update({'lat': 0, 'lng': 0});
+      }
     } else {
       db
           .collection('soldiers')
