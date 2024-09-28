@@ -2,7 +2,7 @@
 
 Project for 2024 Creative Innovation Contest, College of Electronics & Information.<br>
 <br>
-This repository only contains mobile application part of the project. Repository for the website is [here.](https://github.com/grden/arduino-blue-web)
+This repository only contains mobile application part of the project. Repository for the website is [here](https://github.com/grden/arduino-blue-web).
 
 ## Introduction
 
@@ -21,16 +21,16 @@ As a result, we developed a watch capable of detecting safety information from s
 
 ## Usage
 
-<table width="100%">
+<table width="100%" align="center">
   <tr>
     <th>Health Monitor Screen</th>
     <th>Connect to Devices Screen</th>
     <th>Detailed Information Screen</th>
   </tr>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143" width="33.3%"></td>
-    <td><img src="https://github.com/user-attachments/assets/98a0129f-5cbe-443d-8d4b-5481bae2f9f7" width="33.3%"></td>
-    <td><img src="https://github.com/user-attachments/assets/1b3ff926-3eaa-4386-b211-ca6b143e2da7" width="33.3%"></td>
+    <td width="33.3%"><img src="https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143"></td>
+    <td width="33.3%"><img src="https://github.com/user-attachments/assets/98a0129f-5cbe-443d-8d4b-5481bae2f9f7"></td>
+    <td width="33.3%"><img src="https://github.com/user-attachments/assets/1b3ff926-3eaa-4386-b211-ca6b143e2da7"></td>
   </tr>
   <tr>
     <td>Receive a stream of data from Arduino and display changes. Information includes: heart rate, body temperature, and current location.</td>
