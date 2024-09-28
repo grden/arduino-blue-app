@@ -21,7 +21,7 @@ As a result, we developed a watch capable of detecting safety information from s
 
 ## Usage
 
-<table width="100%" align="center">
+<table width="100%" class="center">
   <tr>
     <th>Health Monitor Screen</th>
     <th>Connect to Devices Screen</th>
