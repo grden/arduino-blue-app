@@ -12,6 +12,7 @@ To address this, we proposed a solution centered around providing objective data
 <br>
 As a result, we developed a watch capable of detecting safety information from soldiers and notifying both the soldiers and command control centers through a mobile app and website.<be>
 <br>
+<br>
 <img width="1133" alt="preview" src="https://github.com/user-attachments/assets/477e5561-b2ce-4d68-9fac-f7d37b7c2d81">
 
 ## Service Architecture
@@ -21,16 +22,17 @@ As a result, we developed a watch capable of detecting safety information from s
 ## Usage
 
 **Health Monitor Screen**<br>
-![IMG_0391](https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143 | width="200")
-Receive a stream of data from Arduino and display changes. Information includes: heart rate, body temperature, and current location.
-
+<img src="https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143 width="200">
+<br>
+Receive a stream of data from Arduino and display changes. Information includes: heart rate, body temperature, and current location.<br>
+<br>
 **Connect to Devices Screen**<br>
 <p float="left">
   ![IMG_0392](https://github.com/user-attachments/assets/ac932929-f506-401e-9fd1-9a9ea3937fa6 | width="200")
   ![IMG_0393](https://github.com/user-attachments/assets/98a0129f-5cbe-443d-8d4b-5481bae2f9f7 | width="200")
 </p>
-When the ‘Start Scan’ button(center bottom) is pressed, the app will scan for specialized Arduino devices and display it in the list. You can connect to the device by tapping the ‘Connect’ button.
-
+When the ‘Start Scan’ button(center bottom) is pressed, the app will scan for specialized Arduino devices and display it in the list. You can connect to the device by tapping the ‘Connect’ button.<br>
+<br>
 **Detailed Information Screen**<br>
 ![IMG_0394](https://github.com/user-attachments/assets/1b3ff926-3eaa-4386-b211-ca6b143e2da7)
 When a connection is made, a detailed information screen is available. You can discover and read bluetooth services and characteristics of connected device.
