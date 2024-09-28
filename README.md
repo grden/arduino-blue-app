@@ -28,7 +28,7 @@ Receive a stream of data from Arduino and display changes. Information includes:
 <br>
 **Connect to Devices Screen**<br>
 <p float="left">
-  ![IMG_0392](https://github.com/user-attachments/assets/ac932929-f506-401e-9fd1-9a9ea3937fa6 | width="200")
+  ![IMG_0392](https://github.com/user-attachments/assets/ac932929-f506-401e-9fd1-9a9ea3937fa6" | width="200")
   ![IMG_0393](https://github.com/user-attachments/assets/98a0129f-5cbe-443d-8d4b-5481bae2f9f7 | width="200")
 </p>
 When the ‘Start Scan’ button(center bottom) is pressed, the app will scan for specialized Arduino devices and display it in the list. You can connect to the device by tapping the ‘Connect’ button.<br>
