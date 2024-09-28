@@ -22,7 +22,7 @@ As a result, we developed a watch capable of detecting safety information from s
 ## Usage
 
 **Health Monitor Screen**<br>
-<img src="https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143 width="200">
+<img src="https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143" width="200">
 <br>
 Receive a stream of data from Arduino and display changes. Information includes: heart rate, body temperature, and current location.<br>
 <br>
