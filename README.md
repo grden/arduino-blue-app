@@ -24,5 +24,4 @@ As a result, we developed a watch capable of detecting safety information from s
 |Health Monitor Screen|Connect to Devices Screen|Detailed Information Screen|
 |:---:|:---:|:---:|
 |<img src="https://github.com/user-attachments/assets/104b30fc-b89c-43f5-8b0d-2f8d99b88143" width="240">|<img src="https://github.com/user-attachments/assets/98a0129f-5cbe-443d-8d4b-5481bae2f9f7" width="240">|<img src="https://github.com/user-attachments/assets/1b3ff926-3eaa-4386-b211-ca6b143e2da7" width="240">|
-|Receive a stream of data from Arduino and display changes. Information includes: heart rate, body temperature, and current location.|When the ‘Start Scan’ button(center bottom) is pressed, the app will scan for specialized Arduino devices and display it in the list. You can connect to the device by tapping the ‘Connect’ button.|When a connection is made, a detailed information screen is available. You can discover and read bluetooth services and characteristics of connected device.
-|
+|Receive a stream of data from Arduino and display changes. Information includes: heart rate, body temperature, and current location.|Scan for specialized Arduino devices and display them in the list. You can connect to the device by tapping the ‘Connect’ button.|Discover and read bluetooth services and characteristics of connected device.|
